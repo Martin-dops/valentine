@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Будешь ли ты моей Валентинкой?</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    text-align: center;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+h1 {
+    font-size: clamp(24px, 5vw, 42px);
+    color: white;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.buttons {
+    position: relative;
+    height: 120px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    position: absolute;
+    transition: 0.2s;
+}
+
+#yesBtn {
+    background-color: #ff2e63;
+    color: white;
+    left: 30%;
+}
+
+#noBtn {
+    background-color: #333;
+    color: white;
+    left: 60%;
+}
+
+#imageContainer {
+    display: none;
+    margin-top: 30px;
+}
+
+img {
+    width: 90%;
+    max-width: 350px;
+    border-radius: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Будешь ли ты моей Валентинкой? ❤️</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Да 💖</button>
+        <button id="noBtn">Нет 😏</button>
+    </div>
+
+    <div id="imageContainer">
+        <h2 style="color:white;">УРААА 💕</h2>
+        <img src="photo.jpg" alt="Наше фото">
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const imageContainer = document.getElementById("imageContainer");
+
+// Кнопка "Нет" всегда остаётся в пределах экрана
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
+
+function moveButton() {
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - buttonWidth - 20;
+    const maxY = window.innerHeight - buttonHeight - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+// При нажатии "Да"
+yesBtn.addEventListener("click", function() {
+    imageContainer.style.display = "block";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+});
+</script>
+
+</body>
+</html>
