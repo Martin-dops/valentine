@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Будешь ли ты моей Валентинкой?</title>
+<title>Для тебя ❤️</title>
 
 <style>
 body {
@@ -18,8 +18,16 @@ body {
     text-align: center;
 }
 
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    z-index: 5;
+}
+
 .container {
-    position: relative;
     width: 100%;
     max-width: 500px;
 }
@@ -27,13 +35,15 @@ body {
 h1 {
     font-size: clamp(24px, 5vw, 42px);
     color: white;
-    margin-bottom: 40px;
-    padding: 0 20px;
+    margin-bottom: 50px;
 }
 
+/* Кнопки по центру */
 .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
     position: relative;
-    height: 120px;
 }
 
 button {
@@ -42,79 +52,134 @@ button {
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    position: absolute;
-    transition: 0.2s;
+    transition: 0.2s ease;
+    position: relative;
 }
 
 #yesBtn {
     background-color: #ff2e63;
     color: white;
-    left: 30%;
 }
 
 #noBtn {
     background-color: #333;
     color: white;
-    left: 60%;
 }
 
-#imageContainer {
+/* Второй экран */
+#secondScreen {
     display: none;
-    margin-top: 30px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.loveText {
+    color: white;
+    font-size: clamp(26px, 5vw, 40px);
+    margin-bottom: 20px;
+}
+
+.heartsText {
+    font-size: 40px;
 }
 
 img {
     width: 90%;
     max-width: 350px;
     border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.4);
+}
+
+/* Дождь сердечек */
+.heart {
+    position: fixed;
+    font-size: 24px;
+    animation: fall 4s linear forwards;
+    z-index: 20;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-50px); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
+<div class="overlay" id="overlay"></div>
+
 <div class="container">
-    <h1>Будешь ли ты моей Валентинкой? ❤️</h1>
+    <h1 id="mainQuestion">Будешь ли ты моей Валентинкой? ❤️</h1>
 
     <div class="buttons">
         <button id="yesBtn">Да 💖</button>
-        <button id="noBtn">Нет 😏</button>
-    </div>
-
-    <div id="imageContainer">
-        <h2 style="color:white;">УРААА 💕</h2>
-        <img src="photo.jpg" alt="Наше фото">
+        <button id="noBtn">Нет 😔</button>
     </div>
 </div>
+
+<div id="secondScreen">
+    <div class="loveText">Я тебя сильно люблю</div>
+    <div class="heartsText">💖 💕 💘 💓 💗</div>
+    <br>
+    <img src="photo.jpg" alt="Наше фото">
+</div>
+
+<audio id="romanticMusic" src="music.mp3"></audio>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const imageContainer = document.getElementById("imageContainer");
+const overlay = document.getElementById("overlay");
+const secondScreen = document.getElementById("secondScreen");
+const question = document.getElementById("mainQuestion");
+const music = document.getElementById("romanticMusic");
 
-// Кнопка "Нет" всегда остаётся в пределах экрана
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("touchstart", moveButton);
+// Лёгкое смещение на 80px
+function moveSlightly() {
+    const offsetX = (Math.random() - 0.5) * 200; // от -200 до +200
+    const offsetY = (Math.random() - 0.5) * 400;  // по вертикали до 200
 
-function moveButton() {
-    const buttonWidth = noBtn.offsetWidth;
-    const buttonHeight = noBtn.offsetHeight;
-
-    const maxX = window.innerWidth - buttonWidth - 20;
-    const maxY = window.innerHeight - buttonHeight - 20;
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
 }
 
-// При нажатии "Да"
+
+noBtn.addEventListener("mouseover", moveSlightly);
+noBtn.addEventListener("touchstart", moveSlightly);
+
+// Дождь сердечек
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 4000);
+}
+
+// Нажатие Да
 yesBtn.addEventListener("click", function() {
-    imageContainer.style.display = "block";
+    question.style.display = "none";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
+
+    overlay.style.display = "block";
+    secondScreen.style.display = "block";
+
+    music.play();
+    setInterval(createHeart, 300);
 });
 </script>
 
